@@ -1,0 +1,22 @@
+name: hermes-image-shrink
+version: 1.0.0
+description: "Downscales user-attached images before Hermes inlines them as base64, so a multi-photo turn cannot exceed an upstream proxy's request-body limit (localserver LiteLLM drops bodies over 4 MiB with HTTP 500 'Connection error')."
+author: "J.A.R.V.I.S."
+manifest_version: 2
+api_version: 1
+config_schema:
+  enabled:
+    type: bool
+    label: "Enable image shrink"
+    default: true
+    description: "Cap the bytes an attached image contributes to a request. Restart (or reload plugins) after changing."
+  max_image_bytes:
+    type: int
+    label: "Max base64 chars per image"
+    default: 600000
+    description: "An image whose base64 data URL exceeds this is re-encoded smaller. ~450 KB of JPEG per photo."
+  max_side:
+    type: int
+    label: "Max long edge (px)"
+    default: 1600
+    description: "Starting long-edge cap for the first re-encode attempt; the shrinker steps down from here until it fits."
